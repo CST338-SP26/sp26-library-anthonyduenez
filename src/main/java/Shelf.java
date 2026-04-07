@@ -11,58 +11,102 @@ public class Shelf {
     private int shelfNumber;
     private String subject;
 
+    public Shelf(){
+
+    }
+
     public Shelf(int shelfNumber, String subject) {
+        this.shelfNumber = shelfNumber;
+        this.subject = subject;
     }
 
     public HashMap<Book, Integer> getBooks() {
-        return null;
+        return books;
     }
 
     public void setBooks(HashMap<Book, Integer> books) {
+        this.books = books;
     }
 
     public int getShelfNumber() {
-        return 0;
+        return shelfNumber;
     }
 
     public void setShelfNumber(int shelfNumber) {
+        this.shelfNumber = shelfNumber;
     }
 
     public String getSubject() {
-        return null;
+        return subject;
     }
 
     public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     @Override
     public boolean equals(Object o) {
-        return false;
+        if (o == null || getClass() != o.getClass()) return false;
+        Shelf shelf = (Shelf) o;
+        return getShelfNumber() == shelf.getShelfNumber() && Objects.equals(getSubject(), shelf.getSubject());
     }
 
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(getShelfNumber(), getSubject());
     }
 
     @Override
     public String toString() {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(shelfNumber).append(" : ").append(subject);
+        return sb.toString();
     }
 
     public int getBookCount(Book book) {
-        return 0;
+        if(books.containsKey(book)) {
+            return books.get(book);
+        }
+        return -1;
     }
 
     public Code addBook(Book book) {
-        return null;
+        if (books.containsKey(book)) {
+            books.put(book, books.get(book) + 1);
+            System.out.println(book.toString() + " added to shelf " + toString());
+            return Code.SUCCESS;
+        } else {
+            if (getSubject().equals(book.getSubject())) {
+                books.put(book, 1);
+                System.out.println(book.toString() + " added to shelf " + toString());
+                return Code.SUCCESS;
+            }
+            return Code.SHELF_SUBJECT_MISMATCH_ERROR;
+        }
     }
 
     public Code removeBook(Book book) {
-        return null;
+        if(books.containsKey(book)) {
+            if(books.get(book) == 0) {
+                System.out.println("No copies of " + book.toString() + " remain on the shelf " + getSubject());
+                return Code.BOOK_NOT_IN_INVENTORY_ERROR;
+            }
+            else if (books.get(book) >= 1) {
+                books.put(book, books.get(book) - 1);
+                System.out.println(book.toString() + " successfully removed from shelf " + getSubject());
+                return Code.SUCCESS;
+            }
+        }
+        System.out.println(book.toString() + " is not on shelf " + getSubject());
+        return Code.BOOK_NOT_IN_INVENTORY_ERROR;
     }
 
     public String listBooks() {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(books.size()).append(" books on shelf: ").append(toString());
+        for(Book book : books.keySet()) {
+            sb.append("\n").append(book.toString());
+        }
+        return sb.toString();
     }
 }
