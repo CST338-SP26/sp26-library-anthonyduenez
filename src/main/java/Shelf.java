@@ -63,6 +63,8 @@ public class Shelf {
         return sb.toString();
     }
 
+    
+    // Returns the number of copies for a specific book, or -1 if absent.
     public int getBookCount(Book book) {
         if(books.containsKey(book)) {
             return books.get(book);
@@ -70,6 +72,7 @@ public class Shelf {
         return -1;
     }
 
+    // Adds a book copy if subject matches and returns the operation result code.
     public Code addBook(Book book) {
         if (books.containsKey(book)) {
             books.put(book, books.get(book) + 1);
@@ -85,6 +88,7 @@ public class Shelf {
         }
     }
 
+    // Removes one copy of a book and returns the operation result code.
     public Code removeBook(Book book) {
         if(books.containsKey(book)) {
             if(books.get(book) == 0) {
@@ -101,6 +105,7 @@ public class Shelf {
         return Code.BOOK_NOT_IN_INVENTORY_ERROR;
     }
 
+    // Returns a formatted list of books currently on this shelf.
     public String listBooks() {
         StringBuilder sb = new StringBuilder();
         sb.append(books.size()).append(" books on shelf: ").append(toString());
